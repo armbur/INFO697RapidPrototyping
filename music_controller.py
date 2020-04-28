@@ -108,16 +108,23 @@ tune_button_z = ['G4:4','A4:4']
 # pin8 = digital push button
 # pin12 = Crash sensor
 
+# pin0.write_digital(1) = green light on
+# pin0.write_digital(0) = green light off
+# pin1.write_digital(1) = yellow light on
+# pin1.write_digital(0) = yellow light off
+# pin2.write_digital(1) = red light on
+# pin2.write_digital(0) = red light off
+
 while True:
     if (button_a.is_pressed()):
-        music.play(tune_button_a, pin0, False, False)
+        music.play(tune_button_a, pin16, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_a), 0 ,5)
         sleep(500)
         lcd.clear()
     elif (button_b.is_pressed()):
-        music.play(tune_button_b, pin0, False, False)
+        music.play(tune_button_b, pin16, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_b), 0 ,5)
