@@ -100,13 +100,16 @@ tune_button_b = ['G3:4', 'D#5:4']
 tune_button_x = ['F#4:4']
 tune_button_z = ['G4:4','A4:4']
 
-# pin0 = passive buzzer
-# pin1 = digital buzzer
-# pin3 = joystick x axis - currently not being used in code
-# pin10 = joystick y axis - currently not being used in code
-# pin4 = joystick button - currently not being used in code
+# pin13 = passive buzzer
+# pin14 = digital buzzer
+# pin0 = joystick x axis - currently not being used in code
+# pin2 = joystick y axis - currently not being used in code
+# pin1 = joystick button - currently not being used in code
+# pin5 = digital push button
 # pin8 = digital push button
-# pin12 = Crash sensor
+# pin12 = digital push button
+# pin11 = Crash sensor
+# pin16 = red light
 
 # pin0.write_digital(1) = green light on
 # pin0.write_digital(0) = green light off
@@ -117,28 +120,28 @@ tune_button_z = ['G4:4','A4:4']
 
 while True:
     if (button_a.is_pressed()):
-        music.play(tune_button_a, pin16, False, False)
+        music.play(tune_button_a, pin13, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_a), 0 ,5)
         sleep(500)
         lcd.clear()
     elif (button_b.is_pressed()):
-        music.play(tune_button_b, pin16, False, False)
+        music.play(tune_button_b, pin13, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_b), 0 ,5)
         sleep(500)
         lcd.clear()
     elif pin8.read_digital() == 0:
-        music.play(tune_button_x, pin1, False, False)
+        music.play(tune_button_x, pin14, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_x), 0 ,5)
         sleep(500)
         lcd.clear()
     elif pin12.read_digital() == 0:
-        music.play(tune_button_z, pin1, False, False)
+        music.play(tune_button_z, pin14, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_z), 0 ,5)
