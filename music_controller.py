@@ -3,6 +3,24 @@ import music
 import random
 import speech
 
+# --- Microbit configuration guide---
+
+# pin0 = passive buzzer
+# pin14 = digital buzzer
+# pin2 = joystick x axis
+# pin1 = joystick y axis
+# pin5 = digital push button
+# pin8 = digital push button
+# pin12 = digital push button
+# pin11 = Crash sensor
+# pin16 = red light
+
+# pin16.write_digital(1) = red light on
+# pin16.write_digital(0) = red light off
+
+
+
+# --- LCD CODE START ---
 LCD_I2C_ADDR=39
 
 class LCD1620():
@@ -84,69 +102,94 @@ class LCD1620():
                 self.char(ord(s[i]))
 
 lcd=LCD1620()
+# --- LCD CODE END ---
 
+
+# --- VARIABLES USED IN PROGRAM---
 # used these images during testing of led - currently not being used.
 images_a = [Image.HEART]
 images_b = [Image.HAPPY]
 images_x = [Image.YES]
 
-# music.get_tempo() function that will return for you a tuple consisting of the bpm and ticks.
-music.set_tempo(bpm=240, ticks=4)
-
+# Music notes for buttons
 # C4:4 - This means the note C from octave 4, or middle C, played for 4 ticks.
 #tune_button_a = ['F#4:4','G4:4','A4:4']
 tune_button_a = ['G3:4', 'D5:4']
 tune_button_b = ['G3:4', 'D#5:4']
-tune_button_x = ['F#4:4']
-tune_button_z = ['G4:4','A4:4']
+tune_button_c = ['G4:4','A4:4']
+tune_button_d = ['A4:4']
 
-# pin13 = passive buzzer
-# pin14 = digital buzzer
-# pin0 = joystick x axis - currently not being used in code
-# pin2 = joystick y axis - currently not being used in code
-# pin1 = joystick button - currently not being used in code
-# pin5 = digital push button
-# pin8 = digital push button
-# pin12 = digital push button
-# pin11 = Crash sensor
-# pin16 = red light
+pitch_emulator_on = False
 
-# pin0.write_digital(1) = green light on
-# pin0.write_digital(0) = green light off
-# pin1.write_digital(1) = yellow light on
-# pin1.write_digital(0) = yellow light off
-# pin2.write_digital(1) = red light on
-# pin2.write_digital(0) = red light off
 
 while True:
-    if (button_a.is_pressed()):
-        music.play(tune_button_a, pin13, False, False)
+# --- PITCH EMULATOR CODE START ---
+# code below turns on pitch emulator and prints status to LCD Screen
+# plays a note on repeat and you can use the joystick to change the pitch
+    if button_a.is_pressed():
+        pitch_emulator_on = True
+        pitch_note = 1500
+        pitch_rate = 100
+        lcd.puts('Pitch Mode: ON', 0 ,0)
+    while pitch_emulator_on:
+        joyy = pin1.read_analog()
+        joyx = pin2.read_analog()
+        music.pitch(pitch_note, pitch_rate)
+
+# code below controls the pitch.
+# Move joystick up = higher pitch
+# Move joystick down = lower pitch
+        if joyy < 765:
+            pitch_note += 100
+        if joyy > 901:
+            pitch_note -= 100
+
+        if pin12.read_digital() == 0:
+            pitch_rate += 10
+        if pin8.read_digital() == 0:
+            pitch_rate -= 10
+
+# the code below is a pitch min and max as the buzzer 
+# cannot play pitches above/below a certain range
+# this code is to prevent the program from erroring out
+        if pitch_note > 2999:
+            pitch_note = 3000
+        if pitch_note < 199:
+            pitch_note = 200
+
+# code below turns off pitch emulator and prints status to LCD Screen             
+        if button_b.is_pressed():
+            pitch_emulator_on = False
+            lcd.puts('Pitch Mode: OFF', 0 ,0)
+            sleep(1000)
+            lcd.clear()
+    
+    sleep(100)
+# --- PITCH EMULATOR CODE END ---
+
+# --- PUSH BUTTON TO PLAY NOTES CODE START ---
+    if pin8.read_digital() == 0:
+        music.play(tune_button_a, pin14, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_a), 0 ,5)
         sleep(500)
         lcd.clear()
-    elif (button_b.is_pressed()):
-        music.play(tune_button_b, pin13, False, False)
+    if pin12.read_digital() == 0:
+        music.play(tune_button_b, pin14, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_b), 0 ,5)
         sleep(500)
         lcd.clear()
-    elif pin8.read_digital() == 0:
-        music.play(tune_button_x, pin14, False, False)
+    if pin16.read_digital() == 0:
+        music.play(tune_button_c, pin14, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
-        lcd.puts(str(tune_button_x), 0 ,5)
+        lcd.puts(str(tune_button_c), 0 ,5)
         sleep(500)
         lcd.clear()
-    elif pin12.read_digital() == 0:
-        music.play(tune_button_z, pin14, False, False)
-        lcd.clear()
-        lcd.puts('You played:', 0 ,0)
-        lcd.puts(str(tune_button_z), 0 ,5)
-        sleep(500)
-        lcd.clear()
+# --- PUSH BUTTON TO PLAY NOTE CODE START ---
 
     else:
         display.clear()
