@@ -113,7 +113,6 @@ images_x = [Image.YES]
 
 # Music notes for buttons
 # C4:4 - This means the note C from octave 4, or middle C, played for 4 ticks.
-#tune_button_a = ['F#4:4','G4:4','A4:4']
 tune_button_a = ['G3:4', 'D5:4']
 tune_button_b = ['G3:4', 'D#5:4']
 tune_button_c = ['G4:4','A4:4']
