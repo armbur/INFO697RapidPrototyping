@@ -9,11 +9,11 @@ import speech
 # pin14 = digital buzzer
 # pin2 = joystick x axis
 # pin1 = joystick y axis
-# pin5 = digital push button
+# pin5 = crash push button
 # pin8 = digital push button
 # pin12 = digital push button
-# pin11 = Crash sensor
-# pin16 = red light
+# pin16 = digital push button
+
 
 # pin16.write_digital(1) = red light on
 # pin16.write_digital(0) = red light off
@@ -123,12 +123,14 @@ pitch_emulator_on = False
 
 
 while True:
+
+# Welcome message output to LCD Screen    
+    lcd.puts('Welcome to', 0 ,0)
+    lcd.puts('Music Controller', 0 ,5)
+
 # --- PITCH EMULATOR CODE START ---
 # code below turns on pitch emulator and prints status to LCD Screen
 # plays a note on repeat and you can use the joystick to change the pitch
-
-    lcd.puts('Welcome to', 0 ,0)
-    lcd.puts('Music Controller', 0 ,5)
 
     if button_a.is_pressed():
         pitch_emulator_on = True
