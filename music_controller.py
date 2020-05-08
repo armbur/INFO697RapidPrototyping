@@ -113,6 +113,7 @@ images_x = [Image.YES]
 
 # Music notes for buttons
 # C4:4 - This means the note C from octave 4, or middle C, played for 4 ticks.
+#tune_button_a = ['F#4:4','G4:4','A4:4']
 tune_button_a = ['G3:4', 'D5:4']
 tune_button_b = ['G3:4', 'D#5:4']
 tune_button_c = ['G4:4','A4:4']
@@ -125,11 +126,16 @@ while True:
 # --- PITCH EMULATOR CODE START ---
 # code below turns on pitch emulator and prints status to LCD Screen
 # plays a note on repeat and you can use the joystick to change the pitch
+
+    lcd.puts('Welcome to', 0 ,0)
+    lcd.puts('Music Controller', 0 ,5)
+
     if button_a.is_pressed():
         pitch_emulator_on = True
         pitch_note = 1500
         pitch_rate = 100
         lcd.puts('Pitch Mode: ON', 0 ,0)
+        lcd.puts('                ', 0 ,5)
     while pitch_emulator_on:
         joyy = pin1.read_analog()
         joyx = pin2.read_analog()
@@ -143,7 +149,7 @@ while True:
         if joyy > 901:
             pitch_note -= 100
 
-        if pin12.read_digital() == 0:
+        if pin16.read_digital() == 0:
             pitch_rate += 10
         if pin8.read_digital() == 0:
             pitch_rate -= 10
@@ -157,9 +163,10 @@ while True:
             pitch_note = 200
 
 # code below turns off pitch emulator and prints status to LCD Screen             
-        if button_b.is_pressed():
+        if pin12.read_digital() == 0:
             pitch_emulator_on = False
             lcd.puts('Pitch Mode: OFF', 0 ,0)
+            lcd.puts('                ', 0 ,5)
             sleep(1000)
             lcd.clear()
     
@@ -172,22 +179,23 @@ while True:
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_a), 0 ,5)
-        sleep(500)
+        sleep(800)
         lcd.clear()
     if pin12.read_digital() == 0:
         music.play(tune_button_b, pin14, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_b), 0 ,5)
-        sleep(500)
+        sleep(800)
         lcd.clear()
     if pin16.read_digital() == 0:
         music.play(tune_button_c, pin14, False, False)
         lcd.clear()
         lcd.puts('You played:', 0 ,0)
         lcd.puts(str(tune_button_c), 0 ,5)
-        sleep(500)
+        sleep(800)
         lcd.clear()
+
 # --- PUSH BUTTON TO PLAY NOTE CODE START ---
 
     else:
